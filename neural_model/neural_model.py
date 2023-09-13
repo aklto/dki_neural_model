@@ -3,7 +3,7 @@ import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
-CSV_FILE = "../users/users.csv"
+CSV_FILE = 'users/users.csv'
 
 
 # ---------- Работа с CSV ----------
@@ -80,7 +80,7 @@ def train_model(model):
     Y = [float(row[5]) if len(row) > 5 else 0.0 for row in
          data]
 
-    model.fit(X, Y, epochs=10, batch_size=1, verbose=0)
+    model.fit(X, Y, epochs=100, batch_size=1, verbose=0)
 
 
 def evaluate_user(user_id, model):

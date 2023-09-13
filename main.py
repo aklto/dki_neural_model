@@ -6,7 +6,7 @@ from API_token.API_token import *
 
 bot = telebot.TeleBot(API_TOKEN)
 
-BLACKLIST_FILE = 'blacklist/blacklist.txt'
+BLACKLIST_FILE = '/blacklist/blacklist.txt'
 CSV_FILE = 'users/users.csv'
 
 total_stickers_sent = 0
@@ -144,6 +144,12 @@ def update_user_data(user_id, messages=0, stickers=0, ban_word=0, warns=0):
     with open(CSV_FILE, 'w') as file:
         writer = csv.writer(file)
         writer.writerows(data)
+@bot.message_handler(func=lambda message: message.from_user.id in message_delete_users)
+def delete_users_message(message):
+    bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
+    user_id = str(message.from_user.id)
+    update_user_data(user_id, ban_word=1)
+
 
 @bot.message_handler(func=lambda message: message.reply_to_message is not None)
 def handle_replies(message):
@@ -166,12 +172,6 @@ def handle_all_messages(message):
 
     update_user_data(user_id, messages=1)
 
-
-@bot.message_handler(func=lambda message: message.from_user.id in message_delete_users)
-def delete_users_message(message):
-    bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
-    user_id = str(message.from_user.id)
-    update_user_data(user_id, ban_word=1)
 
 
 
